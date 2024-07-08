@@ -1,0 +1,50 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model FreelanceOrder {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  description String?
+  price       Float?
+  client      Client?  @relation(fields: [clientId], references: [id])
+  clientId    String?
+}
+
+model Blog {
+  id                 String   @id @default(cuid())
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  title              String?
+  content            String?
+  advertisingRevenue Float?
+}
+
+model Client {
+  id              String           @id @default(cuid())
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  name            String?
+  email           String?
+  phone           String?
+  freelanceOrders FreelanceOrder[]
+}
+
+model FinancialFlow {
+  id         String                       @id @default(cuid())
+  createdAt  DateTime                     @default(now())
+  updatedAt  DateTime                     @updatedAt
+  sourceType EnumFinancialFlowSourceType?
+  date       DateTime?
+  amount     Float?
+}
+
+enum EnumFinancialFlowSourceType {
+  Option1
+}
